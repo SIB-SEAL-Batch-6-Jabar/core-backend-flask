@@ -1,20 +1,20 @@
 import os
-from flask import Blueprint, render_template, request
-from sklearn.ensemble import RandomForestClassifier
+from flask import Blueprint, request
 import joblib
 
-from app.config.http import HTTPResponse
+from app.config.http import ExceptionHandler, HTTPResponse
 
-from ...validator.user import UserValidator
+from app.validator import validator
+from app.validator.user import UserValidator
 
 CalculateBlueprint = Blueprint("calculate", __name__, url_prefix="/calculate")
 
 
 @CalculateBlueprint.route("/", methods=["POST"])
-def calculate():
+@validator(UserValidator.CalculateForm)
+def calculate(body):
     try:
         ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-        form = UserValidator.CalculateForm(data=request.json)
 
         columns = [
             "HighBP",
@@ -38,10 +38,7 @@ def calculate():
             "Age",
         ]
 
-        if not form.validate():
-            return HTTPResponse.error("Invalid form data!", form, 422)
-
-        data = {column: form.data[column] for column in columns}
+        data = {column: body[column] for column in columns}
         print(data)
 
         model = joblib.load(os.path.join(ROOT_DIR, "../../data/random_forest.joblib"))
@@ -55,7 +52,6 @@ def calculate():
             case 2:
                 result = "Diabetes"
 
-        # return HTTPResponse.success("Success calculating!", {"result": result})
-        return model
-    except Exception as e:
-        return HTTPResponse.error(str(e), code="500")
+        return HTTPResponse.success("Success calculating!", {"result": result})
+    except ExceptionHandler as e:
+        return HTTPResponse.error(e.message, e.data, e.status)

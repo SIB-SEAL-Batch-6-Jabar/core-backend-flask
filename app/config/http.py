@@ -1,10 +1,7 @@
-HTTPCode = {"success": "200"}
-
-
 class HTTPResponse:
     @staticmethod
     def __getStatus(code):
-        code = code[0]
+        code = str(code)[0]
 
         match code:
             case "1":
@@ -24,15 +21,15 @@ class HTTPResponse:
     def __JSONResponse(code, message, data=None):
         payload = {
             "meta": {
-                "success": code[0] == "2",
-                "code": code,
+                "success": str(code)[0] == "2",
+                "code": int(code),
                 "status": HTTPResponse.__getStatus(code),
                 "message": message,
             }
         }
 
         if data:
-            if code == "422":
+            if code == 422:
                 payload["errors"] = data
             else:
                 payload["data"] = data
@@ -40,42 +37,42 @@ class HTTPResponse:
         return payload
 
     @staticmethod
-    def success(message, data: dict | None = None, code="200"):
+    def success(message, data: dict | None = None, code=200):
         return HTTPResponse.__JSONResponse(code, message, data), int(code)
 
     @staticmethod
-    def error(message, data=None, code="500"):
+    def error(message, data=None, code=500):
         return HTTPResponse.__JSONResponse(code, message, data), int(code)
 
 
 class ErrorHandler:
     @staticmethod
     def handleNotFound(e):
-        return HTTPResponse.error("Resource not found", code="404")
+        return HTTPResponse.error("Resource not found", code=404)
 
     @staticmethod
     def handleMethodNotAllowed():
-        return HTTPResponse.error("Method not allowed", code="405")
+        return HTTPResponse.error("Method not allowed", code=405)
 
     @staticmethod
     def handleInternalServerError(e):
-        return HTTPResponse.error("Internal server error", code="500")
+        return HTTPResponse.error("Internal server error", code=500)
 
     @staticmethod
     def handleUnprocessableEntity(e):
-        return HTTPResponse.error("Unprocessable entity", code="422")
+        return HTTPResponse.error("Unprocessable entity", code=422)
 
     @staticmethod
     def handleBadRequest(e):
-        return HTTPResponse.error("Bad request", code="400")
+        return HTTPResponse.error("Bad request", code=400)
 
     @staticmethod
     def handleUnauthorized(e):
-        return HTTPResponse.error("Unauthorized", code="401")
+        return HTTPResponse.error("Unauthorized", code=401)
 
     @staticmethod
     def handleForbidden(e):
-        return HTTPResponse.error("Forbidden", code="403")
+        return HTTPResponse.error("Forbidden", code=403)
 
     @staticmethod
     def registerErrorHandler(app):
@@ -86,3 +83,13 @@ class ErrorHandler:
         app.register_error_handler(400, ErrorHandler.handleBadRequest)
         app.register_error_handler(401, ErrorHandler.handleUnauthorized)
         app.register_error_handler(403, ErrorHandler.handleForbidden)
+
+
+class ExceptionHandler(Exception):
+    def __init__(self, message, data, status):
+        self.message = message
+        self.data = data
+        self.status = status
+
+    def to_dict(self):
+        return {"message": self.message, "data": self.data, "status": self.status}
