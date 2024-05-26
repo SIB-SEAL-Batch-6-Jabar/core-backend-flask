@@ -1,10 +1,11 @@
-from wtforms import Form, FloatField
+from wtforms import EmailField, Form, FloatField
 from wtforms.validators import NumberRange, AnyOf
 
 from ..custom import Required
 
 
 class CalculateForm(Form):
+    Email = EmailField("Email", [Required()])
     HighBP = FloatField(
         "HighBP",
         [Required(), AnyOf([0.0, 1.0])],
@@ -24,8 +25,8 @@ class CalculateForm(Form):
     AnyHealthcare = FloatField("AnyHealthcare", [Required(), AnyOf([0.0, 1.0])])
     NoDocbcCost = FloatField("NoDocbcCost", [Required(), AnyOf([0.0, 1.0])])
     GenHlth = FloatField("GenHlth", [Required(), AnyOf([1.0, 2.0, 3.0, 4.0, 5.0])])
-    MentHlth = FloatField("MentHlth", [Required(), NumberRange(min=1.0, max=30.0)])
-    PhysHlth = FloatField("PhysHlth", [Required(), NumberRange(min=1.0, max=30.0)])
+    MentHlth = FloatField("MentHlth", [Required(), NumberRange(min=0.0, max=30.0)])
+    PhysHlth = FloatField("PhysHlth", [Required(), NumberRange(min=0.0, max=30.0)])
     DiffWalk = FloatField("DiffWalk", [Required(), AnyOf([0.0, 1.0])])
     Sex = FloatField("Sex", [Required(), AnyOf([0.0, 1.0])])
     Age = FloatField("Age", [Required(), NumberRange(min=1.0, max=13.0)])
