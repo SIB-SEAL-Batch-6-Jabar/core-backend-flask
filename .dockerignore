@@ -1,0 +1,39 @@
+# Ignore the .env file if you don't want it to be included in the Docker image
+# Uncomment the line below if you handle environment variables differently
+# .env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment directories
+venv/
+env/
+ENV/
+.venv/
+.venv-linux/
+
+# Ignore editor and IDE files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Ignore logs
+*.log
+
+# Ignore Docker-related files
+Dockerfile
+Dockerfile.celery
+docker-compose.yml
+
+# Ignore git-related files
+.git/
+.gitignore
+
+# Ignore unnecessary files
+node_modules/
+dist/
+build/
+*.egg-info/
