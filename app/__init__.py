@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_cors import CORS
 from app.blueprint import Blueprint
 from app.config import ErrorHandler
@@ -36,6 +36,19 @@ def create_app():
             headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
             headers["Access-Control-Allow-Headers"] = "X-User-Language, Content-Type"
 
-            return response
+            # return response
+            return Response()
+
+    @app.after_request
+    def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add(
+            "Access-Control-Allow-Headers",
+            "X-User-Language, Content-Type, Authorization",
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"
+        )
+        return response
 
     return app
