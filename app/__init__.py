@@ -38,4 +38,16 @@ def create_app():
 
             return response
 
+    @app.after_request
+    def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add(
+            "Access-Control-Allow-Headers",
+            "X-User-Language, Content-Type, Authorization",
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"
+        )
+        return response
+
     return app
