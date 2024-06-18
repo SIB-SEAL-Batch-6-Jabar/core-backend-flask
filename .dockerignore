@@ -26,6 +26,7 @@ ENV/
 # Ignore Docker-related files
 Dockerfile
 Dockerfile.celery
+Dockerfile.prod
 docker-compose.yml
 
 # Ignore git-related files
