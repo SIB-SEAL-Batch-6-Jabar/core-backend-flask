@@ -55,8 +55,8 @@ jobs:
                 CONTEXTPROD: Dockerfile.prod
                 CONTEXTCELERY: Dockerfile.celery
               run: |
-                docker build -f $CONTEXT-PROD -t $REGISTRY/$REPOSITORYPROD:$IMAGE_TAG .
-                docker build -f $CONTEXT-CELERY -t $REGISTRY/$REPOSITORYCELERY:$IMAGE_TAG .
+                docker build -f $CONTEXTPROD -t $REGISTRY/$REPOSITORYPROD:$IMAGE_TAG .
+                docker build -f $CONTEXTCELERY -t $REGISTRY/$REPOSITORYCELERY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORYPROD:$IMAGE_TAG
                 docker push $REGISTRY/$REPOSITORYCELERY:$IMAGE_TAG
 
