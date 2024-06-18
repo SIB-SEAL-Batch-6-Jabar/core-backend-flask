@@ -49,16 +49,16 @@ jobs:
             - name: Build, tag, and push docker image to amazon ecr
               env: 
                 REGISTRY: ${{steps.login-ecr.outputs.registry}}
-                REPOSITORY-PROD: simanis-core-backend-flask-prod
-                REPOSITORY-CELERY: simanis-core-backend-flask-celery
+                REPOSITORYPROD: simanis-core-backend-flask-prod
+                REPOSITORYCELERY: simanis-core-backend-flask-celery
                 IMAGE_TAG: latest
-                CONTEXT-PROD: Dockerfile.prod
-                CONTEXT-CELERY: Dockerfile.celery
+                CONTEXTPROD: Dockerfile.prod
+                CONTEXTCELERY: Dockerfile.celery
               run: |
-                docker build -f $CONTEXT-PROD -t $REGISTRY/$REPOSITORY-PROD:$IMAGE_TAG .
-                docker build -f $CONTEXT-CELERY -t $REGISTRY/$REPOSITORY-CELERY:$IMAGE_TAG .
-                docker push $REGISTRY/$REPOSITORY-PROD:$IMAGE_TAG
-                docker push $REGISTRY/$REPOSITORY-CELERY:$IMAGE_TAG
+                docker build -f $CONTEXT-PROD -t $REGISTRY/$REPOSITORYPROD:$IMAGE_TAG .
+                docker build -f $CONTEXT-CELERY -t $REGISTRY/$REPOSITORYCELERY:$IMAGE_TAG .
+                docker push $REGISTRY/$REPOSITORYPROD:$IMAGE_TAG
+                docker push $REGISTRY/$REPOSITORYCELERY:$IMAGE_TAG
 
             - name: Update kube config
               run: aws eks update-kubeconfig --name simanis-cluster
