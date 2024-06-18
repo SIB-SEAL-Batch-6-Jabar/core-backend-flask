@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  simanis-core-backend-flask-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: simanis-core-backend-flask-prod
+    container_name: simanis-core-backend-flask-prod
+    restart: unless-stopped
+    # network_mode: host
+    ports:
+      - "5050:5050"
+
+  simanis-core-backend-flask-celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    image: simanis-core-backend-flask-celery
+    container_name: simanis-core-backend-flask-celery
+    restart: unless-stopped
+
+networks:
+  default:
+    name: simanis

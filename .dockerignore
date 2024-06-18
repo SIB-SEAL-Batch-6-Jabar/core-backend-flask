@@ -37,3 +37,7 @@ node_modules/
 dist/
 build/
 *.egg-info/
+
+.github
+docker-compose.yaml
+k8s*.yaml

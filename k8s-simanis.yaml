@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simanis-core-backend-flask
+  labels: 
+    app: simanis-core-backend-flask
+spec:
+  selector:
+    matchLabels:
+      app: simanis-core-backend-flask
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simanis-core-backend-flask
+        env: simanis
+    spec:
+      containers:
+      - name: simanis-core-backend-flask-prod
+        image: 646758500755.dkr.ecr.us-east-1.amazonaws.com/simanis-core-backend-flask-prod:latest #ecr
+        ports:
+          - containerPort: 5050
+        imagePullPolicy: "Always"
+      - name: simanis-core-backend-flask-celery
+        image: 646758500755.dkr.ecr.us-east-1.amazonaws.com/simanis-core-backend-flask-celery:latest #ecr
+        imagePullPolicy: "Always"
+
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: simanis-core-backend-flask
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: simanis-core-backend-flask
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 5050
